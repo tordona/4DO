@@ -1,0 +1,79 @@
+## Visual Studio & MSBuild ignores for C# / C++ mixed solutions
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio 2015/2017/2019/2022 cache and state
+.vs/
+*.VC.db
+*.VC.opendb
+
+# Build results & Output directories
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# C++ Intermediate & Output files
+*.ilk
+*.iobj
+*.ipdb
+*.ipch/
+ipch/
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tlog
+*.idb
+*.sdf
+*.opensdf
+*.res
+
+# MSBuild temporary files & logs
+*.metaproj
+*.metaproj.*
+metaproj.xml
+*.log
+*.tmp_proj
+
+# Test results & Profiling
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+*.psess
+*.vsp
+*.vspx
+
+# Backup, scratch, and temporary files
+*~
+*.bak
+*.orig
+*.swp
+*.dlls
+
+# NuGet
+*.nuget.props
+*.nuget.targets
+packages/
