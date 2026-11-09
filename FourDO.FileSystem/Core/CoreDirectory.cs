@@ -281,7 +281,7 @@ namespace FourDO.FileSystem.Core
 				// remove the rightmost path element from our current path
 				unsafe
 				{
-					IntPtr stringPointer = new IntPtr((int) currentEntry.fileName);
+					IntPtr stringPointer = new IntPtr(currentEntry.fileName);
 					string currentEntryFileName = Marshal.PtrToStringAnsi(stringPointer);
 					_path = _path.Substring(0, _path.Length - currentEntryFileName.Length - 1);
 				}

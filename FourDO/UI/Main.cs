@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -978,7 +978,7 @@ namespace FourDO.UI
 				{
 					fixed (byte* nvramBytePointer = nvramBytes)
 					{
-						EmulationHelper.InitializeNvram(new IntPtr((int)nvramBytePointer));
+						EmulationHelper.InitializeNvram(new IntPtr(nvramBytePointer));
 					}
 				}
 				nvramStream.Write(nvramBytes, 0, nvramBytes.Length);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace FourDO.Emulation.GameSource
 {
@@ -19,14 +19,23 @@ namespace FourDO.Emulation.GameSource
 		{
 			if (!this.isOpen)
 			{
-				this.isOpen = true;
-				
-				this.OnOpen();
-				
-				// Get some metadata
-				this.ReadSectorCount();
-				this.gameId = GameRegistrar.LookUpGameId(this);
-				this.gameName = GameRegistrar.GetGameNameById(this.gameId);
+				try
+				{
+					this.isOpen = true;
+
+					this.OnOpen();
+
+					// Get some metadata
+					this.ReadSectorCount();
+					this.gameId = GameRegistrar.LookUpGameId(this);
+					this.gameName = GameRegistrar.GetGameNameById(this.gameId);
+				}
+				catch
+				{
+					this.isOpen = false;
+					this.OnClose();
+					throw;
+				}
 			}
 		}
 
@@ -50,7 +59,7 @@ namespace FourDO.Emulation.GameSource
 				this.OnReadSector(destinationBuffer, sectorNumber);
 		}
 
-		public int GetSectorCount()
+		public virtual int GetSectorCount()
 		{
 			if (this.isOpen)
 				return this.sectorCount;
@@ -74,14 +83,21 @@ namespace FourDO.Emulation.GameSource
 				return null;
 		}
 
+		protected virtual int GetDefaultSectorCount()
+		{
+			return 0;
+		}
+
 		private unsafe void ReadSectorCount()
 		{
 			var sectorZero = new byte[2048];
 			fixed (byte* sectorBytePointer = sectorZero)
 			{
-				var sectorPointer = new IntPtr((int)sectorBytePointer);
+				var sectorPointer = new IntPtr(sectorBytePointer);
 				this.ReadSector(sectorPointer, 0);
 				this.sectorCount = EmulationHelper.GetSectorCount(sectorPointer);
+				if (this.sectorCount <= 0)
+					this.sectorCount = this.GetDefaultSectorCount();
 			}
 		}
 	}

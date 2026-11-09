@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,7 +78,7 @@ namespace FourDO.FileSystem
 			{
 				fixed (byte* bytesPtr = bytes)
 				{
-					var bytesIntPtr = new IntPtr((int)bytesPtr);
+					var bytesIntPtr = new IntPtr(bytesPtr);
 					uint bytesRead = 0;
 					_fileSystem.CoreFileSystem.FileReader.Read(bytesIntPtr, (uint)bytes.Length, ref bytesRead);
 				}

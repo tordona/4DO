@@ -184,7 +184,7 @@ namespace CDLib
 					try
 					{
 						IntPtr buffer = handle.AddrOfPinnedObject();
-						buffer = (IntPtr)(buffer.ToInt32() + (Index * Marshal.SizeOf(typeof(TRACK_DATA))));
+						buffer = (IntPtr)(buffer.ToInt64() + (Index * Marshal.SizeOf(typeof(TRACK_DATA))));
 						res = (TRACK_DATA)Marshal.PtrToStructure(buffer, typeof(TRACK_DATA));
 					}
 					finally

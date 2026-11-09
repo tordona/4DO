@@ -19,6 +19,8 @@
 [Rr]eleases/
 x64/
 x86/
+!Publish/Tools/x64/
+!Publish/Tools/x64/**
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/

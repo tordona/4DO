@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FourDO.Emulation.GameSource;
 using FourDO.FileSystem;
 using FourDO.Utilities;
@@ -28,14 +28,14 @@ namespace FourDO.UI.DiscBrowser
 				{
 					while (bytesCopied < bufLength)
 					{
-						IntPtr sectorBytesIntPtr = new IntPtr((int) sectorBytesPointer);
-						this.UpdateCachedSector(new IntPtr((int) sectorBytesPointer), sectorNumber);
-						sectorBytesIntPtr = new IntPtr((int) sectorBytesPointer + offset);
+						IntPtr sectorBytesIntPtr = new IntPtr(sectorBytesPointer);
+						this.UpdateCachedSector(new IntPtr(sectorBytesPointer), sectorNumber);
+						sectorBytesIntPtr = new IntPtr(sectorBytesPointer + offset);
 
 						int bytesToCopy = Math.Min((int) (2048 - offset), (int) (bufLength - bytesCopied));
 						Memory.CopyMemory(bufWriteIntPtr, sectorBytesIntPtr, bytesToCopy);
 						bytesCopied += bytesToCopy;
-						bufWriteIntPtr = new IntPtr(buf.ToInt32() + bytesCopied);
+						bufWriteIntPtr = new IntPtr(buf.ToInt64() + bytesCopied);
 
 						offset = 0;
 						sectorNumber++;

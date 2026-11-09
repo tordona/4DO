@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using FourDO.Properties;
 
@@ -119,56 +119,56 @@ namespace FourDO.Emulation.FreeDO
 
 		public static int GetCoreVersion()
 		{
-			return (int)FreeDoInterface((int)InterfaceFunction.FDP_FREEDOCORE_VERSION, (IntPtr)0);
+			return unchecked((int)FreeDoInterface((int)InterfaceFunction.FDP_FREEDOCORE_VERSION, IntPtr.Zero).ToInt64());
 		}
 
 		public static uint GetSaveSize()
 		{
-			return (uint)FreeDoInterface((int)InterfaceFunction.FDP_GET_SAVE_SIZE, (IntPtr)0);
+			return unchecked((uint)FreeDoInterface((int)InterfaceFunction.FDP_GET_SAVE_SIZE, IntPtr.Zero).ToInt64());
 		}
 
 		public static IntPtr GetPointerNVRAM()
 		{
-			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_NVRAM, (IntPtr)0);
+			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_NVRAM, IntPtr.Zero);
 		}
 
 		public static IntPtr GetPointerRAM()
 		{
-			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_RAMS, (IntPtr)0);
+			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_RAMS, IntPtr.Zero);
 		}
 
 		public static IntPtr GetPointerROM()
 		{
-			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_ROMS, (IntPtr)0);
+			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_ROMS, IntPtr.Zero);
 		}
 
 		public static IntPtr GetPointerProfile()
 		{
-			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_PROFILE, (IntPtr)0);
+			return FreeDoInterface((int)InterfaceFunction.FDP_GETP_PROFILE, IntPtr.Zero);
 		}
 
 		public static int Initialize()
 		{
-			return (int)FreeDoInterface(
+			return unchecked((int)FreeDoInterface(
 					(int)InterfaceFunction.FDP_INIT,
-					Marshal.GetFunctionPointerForDelegate(externalInterfaceDelegate));
+					Marshal.GetFunctionPointerForDelegate(externalInterfaceDelegate)).ToInt64());
 		}
 
         public static int GetBiosType()
         {
-            return (int)FreeDoInterface((int)InterfaceFunction.FDP_GET_BIOS_TYPE, (IntPtr)0);
+            return unchecked((int)FreeDoInterface((int)InterfaceFunction.FDP_GET_BIOS_TYPE, IntPtr.Zero).ToInt64());
 
         }
 
         public static int SetAnvilFix(int flag)
         {
-            return (int)FreeDoInterface((int)InterfaceFunction.FDP_SET_ANVIL, (IntPtr)flag);
+            return unchecked((int)FreeDoInterface((int)InterfaceFunction.FDP_SET_ANVIL, new IntPtr(flag)).ToInt64());
 
         }
 
 		public static void Destroy()
 		{
-			FreeDoInterface((int)InterfaceFunction.FDP_DESTROY, (IntPtr)0);
+			FreeDoInterface((int)InterfaceFunction.FDP_DESTROY, IntPtr.Zero);
 		}
 
 		public static void DoExecuteFrame(IntPtr VDLFrame)
@@ -326,12 +326,12 @@ namespace FourDO.Emulation.FreeDO
 
 				case (int)ExternalFunction.EXT_PUSH_SAMPLE:
 					if (PushSampleEvent != null)
-						PushSampleEvent((uint)data);
+						PushSampleEvent(unchecked((uint)data.ToInt64()));
 					break;
 
 				case (int)ExternalFunction.EXT_GET_PBUSLEN:
 					if (GetPbusLengthEvent != null)
-						return (IntPtr)GetPbusLengthEvent();
+						return new IntPtr(GetPbusLengthEvent());
 					break;
 
 				case (int)ExternalFunction.EXT_GETP_PBUSDATA:
@@ -361,20 +361,20 @@ namespace FourDO.Emulation.FreeDO
 
 				case (int)ExternalFunction.EXT_GET_DISC_SIZE:
 					if (GetDiscSizeEvent != null)
-						return (IntPtr)GetDiscSizeEvent();
+						return new IntPtr(GetDiscSizeEvent());
 					break;
 
 				case (int)ExternalFunction.EXT_ON_SECTOR:
 					if (OnSectorEvent != null)
-						OnSectorEvent((int)data);
+						OnSectorEvent(unchecked((int)data.ToInt64()));
 					break;
 
 				case (int)ExternalFunction.EXT_ARM_SYNC:
 					if (ArmSync != null)
-						ArmSync((int)data);
+						ArmSync(unchecked((int)data.ToInt64()));
 					break;
 			}
-			return new IntPtr(0);
+			return IntPtr.Zero;
 		}
 
 		private static byte[] RawSerialize(object anything, out GCHandle newHandle)

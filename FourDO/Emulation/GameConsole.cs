@@ -596,12 +596,12 @@ namespace FourDO.Emulation
 			{
 				fixed (byte* sourceRom1BytesPointer = this.biosRom1Copy)
 				{
-					Utilities.Memory.CopyMemory(romPointer, new IntPtr((int)sourceRom1BytesPointer), ROM1_SIZE);
+					Utilities.Memory.CopyMemory(romPointer, new IntPtr(sourceRom1BytesPointer), ROM1_SIZE);
 				}
 				fixed (byte* sourceRom2BytesPointer = this.biosRom2Copy)
 				{
-					IntPtr bios2DestPointer = new IntPtr(romPointer.ToInt32() + ROM1_SIZE);
-					Utilities.Memory.CopyMemory(bios2DestPointer, new IntPtr((int)sourceRom2BytesPointer), ROM2_SIZE);
+					IntPtr bios2DestPointer = new IntPtr(romPointer.ToInt64() + ROM1_SIZE);
+					Utilities.Memory.CopyMemory(bios2DestPointer, new IntPtr(sourceRom2BytesPointer), ROM2_SIZE);
 				}
 			}
 		}
@@ -610,7 +610,7 @@ namespace FourDO.Emulation
 		{
 			fixed (byte* sourcePtr = this.nvramCopy)
 			{
-				Utilities.Memory.CopyMemory(nvramPointer, new IntPtr((int)sourcePtr), NVRAM_SIZE);
+				Utilities.Memory.CopyMemory(nvramPointer, new IntPtr(sourcePtr), NVRAM_SIZE);
 			}
 		}
 
@@ -618,7 +618,7 @@ namespace FourDO.Emulation
 		{
 			lock (this.nvramCopySemaphore)
 			{
-				Utilities.Memory.CopyMemory(new IntPtr((int)this.nvramCopyPtr), nvramPointer, NVRAM_SIZE);
+				Utilities.Memory.CopyMemory(this.nvramCopyPtr, nvramPointer, NVRAM_SIZE);
 				this.nvramTimer.Enabled = false;
 				this.nvramTimer.Enabled = true;
 			}

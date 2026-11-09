@@ -38,7 +38,9 @@ namespace CDLib
 	/// </summary>
   public class CDDrive: IDisposable
 	{
+	private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
 	private IntPtr cdHandle;
+	private bool IsHandleOpen { get { return cdHandle != IntPtr.Zero && cdHandle != INVALID_HANDLE_VALUE; } }
 	private bool TocValid = false;
 	private Win32Functions.CDROM_TOC Toc = null;
 	private char m_Drive = '\0';
@@ -59,7 +61,7 @@ namespace CDLib
 	  if ( Win32Functions.GetDriveType(Drive+":\\") == Win32Functions.DriveTypes.DRIVE_CDROM )
 	  {
 		cdHandle = Win32Functions.CreateFile("\\\\.\\"+Drive+':', Win32Functions.GENERIC_READ, Win32Functions.FILE_SHARE_READ, IntPtr.Zero, Win32Functions.OPEN_EXISTING, 0, IntPtr.Zero);
-		if ( ((int)cdHandle != -1) && ((int)cdHandle != 0) )
+		if ( IsHandleOpen )
 		{
 		  m_Drive = Drive;
 		  NotWnd = new DeviceChangeNotificationWindow();
@@ -85,7 +87,7 @@ namespace CDLib
 		NotWnd.DestroyHandle();
 		NotWnd = null;
 	  }
-	  if ( ((int)cdHandle != -1) && ((int)cdHandle != 0) )
+	  if ( IsHandleOpen )
 	  {
 		Win32Functions.CloseHandle(cdHandle);
 	  }
@@ -98,7 +100,7 @@ namespace CDLib
 	{
 	  get
 	  {
-		return ((int)cdHandle != -1) && ((int)cdHandle != 0);
+		return IsHandleOpen;
 	  }
 	}
 
@@ -115,7 +117,7 @@ namespace CDLib
 
 	protected bool ReadTOC()
 	{
-	  if ( ((int)cdHandle != -1) && ((int)cdHandle != 0) )
+	  if ( IsHandleOpen )
 	  {
 		uint BytesRead = 0; 
 		TocValid = Win32Functions.DeviceIoControl(cdHandle, Win32Functions.IOCTL_CDROM_READ_TOC, IntPtr.Zero, 0, Toc, (uint)Marshal.SizeOf(Toc), ref BytesRead, IntPtr.Zero) != 0;
@@ -215,7 +217,7 @@ namespace CDLib
 	/// <returns>True on success</returns>
 	public bool LockCD()
 	{
-	  if (((int)cdHandle != -1) && ((int)cdHandle != 0))
+	  if (IsHandleOpen)
 	  {
 		uint Dummy = 0;
 		Win32Functions.PREVENT_MEDIA_REMOVAL pmr = new Win32Functions.PREVENT_MEDIA_REMOVAL();
@@ -233,7 +235,7 @@ namespace CDLib
 	/// <returns>True on success</returns>
 	public bool UnLockCD()
 	{
-	  if (((int)cdHandle != -1) && ((int)cdHandle != 0))
+	  if (IsHandleOpen)
 	  {
 		uint Dummy = 0;
 		Win32Functions.PREVENT_MEDIA_REMOVAL pmr = new Win32Functions.PREVENT_MEDIA_REMOVAL();
@@ -252,7 +254,7 @@ namespace CDLib
 	public bool LoadCD()
 	{
 	  TocValid = false;
-	  if (((int)cdHandle != -1) && ((int)cdHandle != 0))
+	  if (IsHandleOpen)
 	  {
 		uint Dummy = 0;
 		return Win32Functions.DeviceIoControl(cdHandle, Win32Functions.IOCTL_STORAGE_LOAD_MEDIA, IntPtr.Zero, 0, IntPtr.Zero, 0, ref Dummy, IntPtr.Zero) != 0;
@@ -269,7 +271,7 @@ namespace CDLib
 	public bool EjectCD()
 	{
 	  TocValid = false;
-	  if (((int)cdHandle != -1) && ((int)cdHandle != 0))
+	  if (IsHandleOpen)
 	  {
 		uint Dummy = 0;
 		return Win32Functions.DeviceIoControl(cdHandle, Win32Functions.IOCTL_STORAGE_EJECT_MEDIA, IntPtr.Zero, 0, IntPtr.Zero, 0, ref Dummy, IntPtr.Zero) != 0;
@@ -285,7 +287,7 @@ namespace CDLib
 	/// <returns>True on success</returns>
 	public bool IsCDReady()
 	{
-	  if (((int)cdHandle != -1) && ((int)cdHandle != 0))
+	  if (IsHandleOpen)
 	  {
 		uint Dummy = 0;
 		if (Win32Functions.DeviceIoControl(cdHandle, Win32Functions.IOCTL_STORAGE_CHECK_VERIFY, IntPtr.Zero, 0, IntPtr.Zero, 0, ref Dummy, IntPtr.Zero) != 0)

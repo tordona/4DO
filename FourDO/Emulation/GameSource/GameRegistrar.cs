@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -61,7 +61,7 @@ namespace FourDO.Emulation.GameSource
 				{
 					fixed (byte* dataPtr = &checkSumSourceData[x * 2048])
 					{
-						gameSource.ReadSector(new IntPtr((int)dataPtr), x);
+						gameSource.ReadSector(new IntPtr(dataPtr), x);
 					}
 				}
 			}

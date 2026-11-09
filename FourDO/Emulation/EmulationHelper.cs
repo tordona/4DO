@@ -1,12 +1,29 @@
-﻿using System;
+using System;
 using FourDO.FileSystem.Core.Structs;
 
 namespace FourDO.Emulation
 {
 	public unsafe static class EmulationHelper
 	{
+		public static bool HasValidVolumeHeader(IntPtr sectorZeroByteZero)
+		{
+			if (sectorZeroByteZero == IntPtr.Zero)
+				return false;
+
+			var sectorZeroStruct = (CoreVolumeHeader*)sectorZeroByteZero.ToPointer();
+			return sectorZeroStruct->recordType == 0x01
+				&& sectorZeroStruct->syncBytes[0] == (byte)'Z'
+				&& sectorZeroStruct->syncBytes[1] == (byte)'Z'
+				&& sectorZeroStruct->syncBytes[2] == (byte)'Z'
+				&& sectorZeroStruct->syncBytes[3] == (byte)'Z'
+				&& sectorZeroStruct->syncBytes[4] == (byte)'Z';
+		}
+
 		public static int GetSectorCount(IntPtr sectorZeroByteZero)
 		{
+			if (sectorZeroByteZero == IntPtr.Zero || !HasValidVolumeHeader(sectorZeroByteZero))
+				return 0;
+
 			var sectorZeroStruct = (CoreVolumeHeader*)sectorZeroByteZero.ToPointer();
 			return (int)ReverseBytes(sectorZeroStruct->blockCount);
 		}
